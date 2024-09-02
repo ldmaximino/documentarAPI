@@ -23,7 +23,7 @@ export default class MongoDao {
     try {
       //Check if code is already exists
       const productExist = await this.model.findOne({ code: obj.code });
-      if (productExist) return { msg: "Code already exists. Code not created" };
+      if (productExist) return { productExist: true, msg: "Code already exists. Code not created" };
       return await this.model.create(obj);
     } catch (error) {
       throw new Error(error);

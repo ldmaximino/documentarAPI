@@ -33,6 +33,7 @@ export default class Controllers {
       if (role === "premium") req.body = { ...req.body, owner: email };
       //
       const data = await this.service.create(req.body);
+      if(data.productExist) return httpResponse.UnAuth(res, data);
       return httpResponse.Created(res, data);
     } catch (error) {
       next(error);

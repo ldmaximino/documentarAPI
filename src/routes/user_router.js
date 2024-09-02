@@ -5,6 +5,7 @@ import passport from "passport";
 //Local imports
 import UserController from "../controllers/user_controller.js";
 import { refreshToken } from "../middlewares/jwt.js";
+import { userValidator } from "../middlewares/user_validators.js";
 
 const controller = new UserController();
 const router = Router();
@@ -26,13 +27,13 @@ router.get(
 );
 
 //Register User with passport local strategy
-router.post("/register", (req, res, next) => {
+router.post("/register", userValidator, (req, res, next) => {
   passport.authenticate("registerStrat", (err, user, info) => {
     if (err) {
       return next(err);
     }
     if (!user) {
-      if(req.headers["user-agent"].slice(0,7) === "Postman") {
+      if(req.headers["user-agent"].slice(0,7) === "Postman" || req.headers["x-requested-from"] === "swagger") {
         return res.status(400).json({ message: info.message });
       } else return res.redirect("/user_exist");      
     }
@@ -68,7 +69,7 @@ router.put("/update-pass", passport.authenticate('current'), controller.updatePa
 router.put(
   "/premium",[
   refreshToken,
-  passport.authenticate("current") ],
+  passport.authenticate("current")],
   controller.changeUserRole
 );
 

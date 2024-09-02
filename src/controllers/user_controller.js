@@ -15,8 +15,8 @@ export default class UserController extends Controllers {
   async registerResponse(req, res, next) {
     try {
       logger.warn(`New user registered`);
-      if (req.headers["user-agent"].slice(0, 7) === "Postman") {
-        res.status(400).json({ message: "User created" });
+      if (req.headers["user-agent"].slice(0, 7) === "Postman" || req.headers["x-requested-from"] === "swagger") {
+        return httpResponse.Ok(res, 'User created');
       } else {
         return res.redirect("/user_registered");
       }
@@ -29,15 +29,15 @@ export default class UserController extends Controllers {
     try {
       const user = await userService.login(req.body);
       if (!user) {
-        if (req.headers["user-agent"].slice(0, 7) === "Postman") {
-          return res.json({ message: "User not exists" });
+        if (req.headers["user-agent"].slice(0, 7) === "Postman" || req.headers["x-requested-from"] === "swagger") {
+          return httpResponse.Not_Found(res, 'User not exists');
         } else return res.redirect("/user_login_error");
       }
       logger.warn(`User ${user.email} logged in`);
       const token = userService.generateToken(user);
       res.cookie("token", token, { httpOnly: true });
-      if (req.headers["user-agent"].slice(0, 7) === "Postman") {
-        return res.json(user);
+      if (req.headers["user-agent"].slice(0, 7) === "Postman" || req.headers["x-requested-from"] === "swagger") {
+        return httpResponse.Ok(res, user);
       } else return res.redirect("/products");
     } catch (error) {
       next(error);

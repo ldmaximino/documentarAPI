@@ -4,6 +4,8 @@ import handlebars from "express-handlebars";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import swaggerJSDoc from "swagger-jsdoc"; //swaggerJSDoc allows you to document in nodejs
+import swaggerUI from "swagger-ui-express"; //swaggerUI manages the graphical interface of the documentation
 
 //Local imports
 import { errorHandler } from "./middlewares/error_handler.js";
@@ -16,7 +18,10 @@ import './passport/github_strategy.js';
 import './passport/current_strategy.js';
 import MainRouter from './routes/index_router.js';
 import { logger } from "./utils/logger.js";
+import { info } from './docs/info.js';
 const mainRouter = new MainRouter();
+
+const specs = swaggerJSDoc(info);
 
 //Store Config definition
 const storeConfig = {
@@ -37,6 +42,7 @@ const storeConfig = {
 const app = express();
 
 //Middlewares
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs));
 app.use(express.static(__dirname + "/public"));
 app.use('/cart', express.static(__dirname + '/public')); // I had to add this middleware so that the /cart/:cid path takes the css file. If you comment on this line you will see that the cart css does not work
 app.use(express.json());

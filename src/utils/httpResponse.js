@@ -16,7 +16,8 @@ const errors_Dict = {
   INT_SERV_ERROR: "Internal Server Error",
   UPD: "Updated",
   DEL: "Deleted",
-  VALIDPROD: "Fields Errors"
+  VALIDPROD: "Product Fields Errors",
+  VALIDUSERS: "User Fields Errors"
 };
 
 export class HttpResponse {
@@ -88,6 +89,14 @@ export class HttpResponse {
     return res.status(respCode.NOT_FOUND).json({
       status: respCode.CREATED,
       message: errors_Dict.VALIDPROD,
+      data,
+    });
+  }
+
+  validatorUsers(res, data) {
+    return res.status(respCode.NOT_FOUND).json({
+      status: respCode.CREATED,
+      message: errors_Dict.VALIDUSERS,
       data,
     });
   }
