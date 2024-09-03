@@ -264,6 +264,83 @@ components:
           products: 
             quantity: 2
             product: 66cfabf91cfadd37f5025104
+      GetAllCarts:
+        type: array
+        items:
+          properties:    
+            id:
+              type: string
+              description: ID del producto
+            products:
+              type: array
+              description: array de productos
+              quantity:
+                type: number
+                description: cantidad del producto
+              product:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID del producto
+                  title:
+                    type: string
+                    description: Título del producto
+                  description:
+                    type: string
+                    description: Descripción del producto
+                  code:
+                    type: string
+                    description: Código del producto
+                  price:
+                    type: number
+                    description: Precio del producto
+                  status:
+                    type: boolean
+                    description: Estado del producto
+                  stock:
+                    type: number
+                    description: Cantidad en stock del producto
+                  category:
+                    type: string
+                    description: Categoría del producto
+                  thumbnails:
+                    type: array
+                    description: Imágenes del producto
+                  owner:
+                    type: string
+                    description: Usuario que creó el producto
+        example:
+            id: 66cfabf91cfadd37f5025104
+            products: 
+              quantity: 3
+              product: 
+                id: 66d2642c0e923c1f68369e8b
+                title": Heladera Whirlpool WRM5602 c/Freezer 462L
+                description: Heladera inverter no frost Whirlpool WRM56D2 blanca con freezer 462L 220V
+                code: HWH5602
+                price: 1801
+                status: false
+                stock: 1
+                category: Helad-Freezer
+                thumbnails: [HWH5602_01.jpg, HWH5602_02.jpg]
+                owner": admin
+      CartNotFound:
+        type: object
+        properties:
+          status:
+            type: number
+            description: Código de estado de la petición
+          message:
+            type: string
+            description: Estado de la petición
+          data:
+            type: string
+            description: Cart Not Found
+        example:
+          status: 404
+          message: Not Found
+          error: null
     InternalServerError:
       type: object
       properties:

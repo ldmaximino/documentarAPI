@@ -279,18 +279,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schema/Carts/Cart'
-        401:
-          description: Product already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schema/Products/ProductUnauth'
-        403:
-          description: User privileges
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schema/Products/RolePrivileges'
         500: 
           description: Error del servidor.
           content:
@@ -299,18 +287,110 @@ paths:
                 $ref: '#/components/schema/InternalServerError'
     get:
       tags:
-      - Products
-      summary: Lista de Productos
+      - Carts
+      summary: Lista de Carritos
       responses:
         200: 
-          description: Lista de productos
+          description: Lista de carritos
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Products/GetAllProducts'
+                $ref: '#/components/schema/Carts/GetAllCarts'
         500: 
           description: Error del servidor.
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/InternalServerError'  
+                $ref: '#/components/schema/InternalServerError'
+/api/carts/cart:
+  get:
+    tags:
+    - Carts
+    summary: Buscar carrito por id.
+    responses:
+      200:
+        description: carrito encontrado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Carts/Cart'
+      404:
+        description: Cart not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Carts/CartNotFound'
+      500: 
+        description: Error del servidor.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/InternalServerError'
+/api/carts/product/{id}:
+  get:
+      tags:
+      - Carts
+      summary: Agregar producto al carrito
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: id referente al producto
+          schema:
+            type: string
+      responses:
+        200:
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Carts/Cart'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Carts/CartNotFound'
+        500: 
+          description: Error del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/InternalServerError'
+  put:
+    tags:
+    - Carts
+    summary: Actualizar cantidad del producto en el carrito
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: id referente al producto
+        schema:
+          type: string
+    responses:
+      200:
+        description: Cantidad Actualizada
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Carts/Cart'
+  delete:
+    tags:
+    - Carts
+    summary: Eliminar producto del carrito
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: id referente al producto
+        schema:
+          type: string
+    responses:
+      200:
+        description: Producto borrado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Carts/Cart'
+      
